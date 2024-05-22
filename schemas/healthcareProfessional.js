@@ -23,6 +23,22 @@ const healthcareProfessionalSchema = mongoose.Schema({
         type:String,
         required:true
     },
+    hcpTelephone: { 
+        type: String,
+        required: true
+    },
+    hcpAddress: { 
+        type: String,
+        required: true
+    },  
+    hcpPosition:{
+        type:String,
+        required:true
+    }, 
+    hcpAge:{
+        type: Number,
+        required:true
+    },
     username:{
         type:String,
         required:true,
@@ -31,6 +47,10 @@ const healthcareProfessionalSchema = mongoose.Schema({
     password:{
         type:String,
         required:true
+    },
+    hcpinfo:{
+        type:String,
+        
     }
 })
  module.exports = mongoose.model("Healthcare",healthcareProfessionalSchema)

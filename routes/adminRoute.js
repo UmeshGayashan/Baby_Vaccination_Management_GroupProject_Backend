@@ -11,7 +11,7 @@ module.exports = router;
 //Healthcare Professional Account Creation
 router.post("/create-health-acc", async (req, res) => {
     try {
-        const { firstName, lastName, nic, postalCode, email, username, password } = req.body;
+        const { firstName, lastName, nic, postalCode, email, username, password ,telephone,position,age,info} = req.body;
         // Hash the password using bcrypt
         const hashedPassword = await bcrypt.hash(password, 10); 
         const newHealthAcc = new healthcareProfessionalSchema({
@@ -22,7 +22,12 @@ router.post("/create-health-acc", async (req, res) => {
             hcpNIC: nic,
             hcpPostalCode: postalCode,
             hcpEmail: email,
-            username: username, // For Login
+            hcpTelephone: telephone,
+            hcpAddress: telephone,
+            hcpPosition: position,
+            hcpAge: age,
+            hcpinfo:info,
+            username: username,
             password: hashedPassword
         });
 

@@ -404,7 +404,7 @@ router.get("/healthcares/count", async (req, res) => {
   }
 });
 
-// Route to get the count of healthcare professionals
+// Route to get the count of Babies
 router.get("/babies/count", async (req, res) => {
   try {
       const count = await babySchema.countDocuments();
@@ -414,7 +414,7 @@ router.get("/babies/count", async (req, res) => {
   }
 });
 
-// Route to get the count of healthcare professionals
+// Route to get the count of parents
 router.get("/parents/count", async (req, res) => {
   try {
       const count = await ParentSchema.countDocuments();

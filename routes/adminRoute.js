@@ -394,4 +394,14 @@ router.get('/get-parent-acc/:nic', async (req, res) => {
   }
 });
 
+// Route to get the count of healthcare professionals
+router.get("/healthcares/count", async (req, res) => {
+  try {
+      const count = await healthcareProfessionalSchema.countDocuments();
+      res.status(200).json({ count });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router; // Export the router instance

@@ -49,22 +49,6 @@ router.post("/login", async (req, res) => {
     const guardian = await guardianSchema.findOne({ username });
     const healthcareProfessional = await healthcareProfessionalSchema.findOne({ username });
 
-    // // Use async/await to find a user by username and password
-    // const user = await userSchema.findOne({
-    //   username: username,
-    //   password: password,
-    // });
-
-    // const guardian = await guardianSchema.findOne({
-    //   parentAccountUsername: username,
-    //   parentAccountPassword: password,
-    // });
-
-    // const healthcareProfessional = await healthcareProfessionalSchema.findOne({
-    //   hcpUsername: username, 
-    //   hcpPassword: password,
-    // });
-
     if (user) {
       // Compare the entered password with the hashed password in the database
       const passwordMatch = await bcrypt.compare(password, user.password);

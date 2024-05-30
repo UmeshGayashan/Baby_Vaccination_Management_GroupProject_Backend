@@ -424,4 +424,14 @@ router.get("/parents/count", async (req, res) => {
   }
 });
 
+// Route to get the count of vaccinations
+router.get("/vaccinations/count", async (req, res) => {
+  try {
+      const count = await vaccinationSchema.countDocuments();
+      res.status(200).json({ count });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router; // Export the router instance

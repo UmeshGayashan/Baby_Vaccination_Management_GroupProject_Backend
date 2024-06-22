@@ -3,7 +3,7 @@ const userSchema = require("../schemas/userSchema")
 const guardianSchema = require("../schemas/guardianSchema")
 const healthcareProfessionalSchema = require("../schemas/healthcareProfessional") 
 
-const key = "yourSecretKey"; // Replace with your secret key
+const key = "yourSecretKey"; // secret key
 
 const generateToken = (userID,userType) => {
   const token = jwt.sign(

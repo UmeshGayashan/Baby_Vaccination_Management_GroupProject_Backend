@@ -451,4 +451,38 @@ router.get("/vaccinations/count", async (req, res) => {
   }
 });
 
+// Endpoint to get next vaccination date and parents' mobile number by bottle_code
+router.get('/vaccination/:bottle_code', async (req, res) => {
+  try {
+    const bottleCode = req.params.bottle_code;
+
+    // Find the vaccination record by bottle_code
+    const vaccination = await vaccinationSchema.findOne({ bottle_code: bottleCode });
+    if (!vaccination) {
+      return res.status(404).json({ error: 'Vaccination record not found' });
+    }
+
+    // Find the baby record by bid (baby ID)
+    const baby = await babySchema.findOne({ bid: vaccination.bid });
+    if (!baby) {
+      return res.status(404).json({ error: 'Baby record not found' });
+    }
+
+    // Find the parent record by mother's NIC
+    const parent = await ParentSchema.findOne({ motherorGuardianNIC: baby.motherorGuardianNIC });
+    if (!parent) {
+      return res.status(404).json({ error: 'Parent record not found' });
+    }
+
+    // Respond with the next vaccination date and parents' mobile number
+    res.json({
+      nextVaccinationDate: vaccination.nextDateTime.date,
+      nextVaccinationTime: vaccination.nextDateTime.time,
+      parentMobileNumber: parent.guardianTelephoneNumber
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router; // Export the router instance

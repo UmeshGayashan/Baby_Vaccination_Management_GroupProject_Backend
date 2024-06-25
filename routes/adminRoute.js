@@ -461,7 +461,7 @@ router.get("/vaccinations/count", async (req, res) => {
   }
 });
 
-// Endpoint to get next vaccination date and parents' mobile number by bottle_code
+// To get next vaccination date and parents' mobile number by bottle_code
 router.get('/vaccination/:bottle_code', async (req, res) => {
   try {
     const bottleCode = req.params.bottle_code;

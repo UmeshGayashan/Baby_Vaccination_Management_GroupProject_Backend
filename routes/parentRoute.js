@@ -41,4 +41,49 @@ router.get("/get/:motherorGuardianNIC", async (req, res) => {
     }
   });
 
+  router.get('/babies/vaccinations/:motherorGuardianNIC', async (req, res) => {
+    const motherorGuardianNIC = req.params.nic;
+  
+    try {
+      const babies = await babySchema.find({ motherorGuardianNIC }); // Find babies with the given parent's NIC
+  
+      if (babies.length === 0) {
+        return res.status(404).json({ error: 'No babies found for this parent' });
+        console.log("No babies found for this parent");
+      }
+  
+      const babyIds = babies.map(baby => baby.bid); // Get the list of baby IDs
+  
+      const results = await vaccinationSchema.aggregate([
+        { $match: { bid: { $in: babyIds } } }, // Match vaccinations for the babies
+        {
+          $lookup: {
+            from: "babies", // The collection name in the MongoDB database
+            localField: "bid",
+            foreignField: "bid",
+            as: "babyDetails"
+          }
+        },
+        { $unwind: "$babyDetails" }, // Flatten the babyDetails array
+        {
+          $project: {
+            _id: 0,
+            "babyDetails.babyName": 1,
+            "babyDetails.bid": 1,
+            "nextDateTime.date": 1
+          }
+        },
+        {
+          $sort: {
+            "nextDateTime.date": -1 // Sort by next vaccination date in descending order
+          }
+        }
+      ]);
+  
+      res.status(200).json(results);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching babies with vaccinations' });
+    }
+  });
+  
 module.exports = router; // Export the router instance

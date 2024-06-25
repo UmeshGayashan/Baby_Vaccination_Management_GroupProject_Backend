@@ -489,7 +489,8 @@ router.get('/vaccination/:bottle_code', async (req, res) => {
     res.json({
       nextVaccinationDate: vaccination.nextDateTime.date,
       nextVaccinationTime: vaccination.nextDateTime.time,
-      parentMobileNumber: parent.guardianTelephoneNumber
+      parentMobileNumber: parent.guardianTelephoneNumber,
+      bid: vaccination.bid
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

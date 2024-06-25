@@ -227,5 +227,15 @@ router.get("/parents", async (req, res) => {
   }
 });
 
+// Route to get all vaccinations
+router.get("/vaccinations", async (req, res) => {
+  try {
+      const vanccinations = await vaccinationSchema.find();
+      res.status(200).json(vanccinations);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
 
 module.exports = router; // Export the router instance

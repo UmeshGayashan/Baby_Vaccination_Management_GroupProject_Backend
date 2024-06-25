@@ -5,6 +5,7 @@ const ParentSchema = require("../schemas/guardianSchema");
 const babySchema = require("../schemas/babySchema");
 const vaccinationSchema = require("../schemas/vaccinationSchema")
 const bcrypt = require('bcrypt')
+const twilio = require('twilio');
 
 module.exports = router;
 
@@ -492,6 +493,73 @@ router.get('/vaccination/:bottle_code', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+router.get("/vac/:bid", async (req, res) => {
+  const bid = req.params.bid;
+
+  try {
+    const vaccinations = await vaccinationSchema.find({ bid });
+
+    if (!vaccinations || vaccinations.length === 0) {
+      return res.status(404).json({ error: "No Vaccinations found" });
+    }
+
+    return res.status(200).json(vaccinations);
+  } catch (err) {
+    return res.status(500).json({
+      error: "Error while fetching babies",
+      message: err.message,
+    });
+  }
+});
+
+//send SMS to give remainders
+
+// Twilio configuration
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
+// Route to send a message with next vaccination date and baby ID
+router.post('/send-vaccination-reminder', async (req, res) => {
+  const { phoneNumber, babyId, nextDate } = req.body;
+
+  if (!phoneNumber || !babyId || !nextDate) {
+    return res.status(400).json({ error: 'Phone number, baby ID, and next date are required' });
+  }
+
+  try {
+    // Find the baby with the given babyId
+    const baby = await babySchema.findOne({ bid: babyId });
+    
+    if (!baby) {
+      return res.status(404).json({ error: 'Baby not found' });
+    }
+    // Create the message content
+    const messageContent = `Dear Parent/Guardian, This is a reminder that your baby (ID: ${babyId}) is due for their next vaccination on ${nextDate}. Please ensure your child receives the vaccination on the scheduled date. Thank you.`;
+
+    // Send the message using Twilio
+    client.messages
+      .create({
+        to: phoneNumber,
+        from: '+12077076920', // My number
+        body: messageContent,
+      })
+      .then(message => {
+        console.log(message.sid);
+        res.status(200).json({ message: 'Message sent successfully', sid: message.sid });
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to send message' });
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred' });
   }
 });
 

@@ -517,13 +517,13 @@ router.get("/vac/:bid", async (req, res) => {
     });
   }
 });
-
+require('dotenv').config();
 //send SMS to give remainders
 
 // Twilio configuration
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
+const client = twilio(accountSid, authToken);
 
 // Route to send a message with next vaccination date and baby ID
 router.post('/send-vaccination-reminder', async (req, res) => {

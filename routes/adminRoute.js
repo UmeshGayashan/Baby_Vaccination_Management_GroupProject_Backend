@@ -521,8 +521,8 @@ require('dotenv').config();
 //send SMS to give remainders
 
 // Twilio configuration
-const accountSid = 'AC4954c15ce342d7b5e858fb758bb57ad2';
-const authToken = '399d4795db1a740bb411a87994ff07cc';
+const accountSid = 'AC269ae6bb0419cdb03d318c53d0471ba5';
+const authToken = 'b2e7b24e7b3557ef3057a17f036b44f0';
 // const client = require('twilio')(accountSid, authToken);
 
 console.log(accountSid);
@@ -556,7 +556,7 @@ router.post('/send-vaccination-reminder', async (req, res) => {
     client.messages
       .create({
         to: '+94'+ phoneNumber,
-        from: '+12077076920', // My number
+        from: '+15134502793', // My number
         body: messageContent,
       })
       .then(message => {

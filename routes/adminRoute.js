@@ -6,6 +6,7 @@ const babySchema = require("../schemas/babySchema");
 const vaccinationSchema = require("../schemas/vaccinationSchema")
 const bcrypt = require('bcrypt')
 const twilio = require('twilio');
+const saltRounds = 10; // Define saltRounds
 
 module.exports = router;
 
@@ -139,7 +140,7 @@ router.put("/update-parent-acc/:nic", async (req, res) => {
       const hashedPassword = await bcrypt.hash(updateData.password, saltRounds);
       updateData.password = hashedPassword;
     }
-    
+
     console.log(updateData);
     const account = await ParentSchema.findOneAndUpdate(
       { motherorGuardianNIC: nic },

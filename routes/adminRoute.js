@@ -549,10 +549,15 @@ router.post('/send-vaccination-reminder', async (req, res) => {
     if (!baby) {
       return res.status(404).json({ error: 'Baby not found' });
     }
+    // Extract the date from the nextDate timestamp
+    const dateObject = new Date(nextDate);
+    const formattedDate = dateObject.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    
     // Create the message content
-    const messageContent = `Dear Parent/Guardian, This is a reminder that your baby (ID: ${babyId}) is due for their next vaccination on ${nextDate}. Please ensure your child receives the vaccination on the scheduled date. Thank you.`;
+    const messageContent = `Dear Parent/Guardian, This is a reminder that your baby (ID: ${babyId}) is due for their next vaccination on ${formattedDate}. Please ensure your child receives the vaccination on the scheduled date. Thank you.`;
     const phoneNumber1 = '+94' + phoneNumber.toString();
     console.log(phoneNumber1);
+
     // Send the message using Twilio
     client.messages
       .create({

@@ -533,7 +533,6 @@ if (!accountSid || !authToken) {
 }
 const client = require('twilio')(accountSid, authToken);
 
-
 // Route to send a message with next vaccination date and baby ID
 router.post('/send-vaccination-reminder', async (req, res) => {
   let { phoneNumber, babyId, nextDate } = req.body;
@@ -543,6 +542,8 @@ router.post('/send-vaccination-reminder', async (req, res) => {
   }
 
   try {
+    console.log('Received nextDate:', nextDate); // Check the received nextDate
+
     // Find the baby with the given babyId
     const baby = await babySchema.findOne({ bid: babyId });
     
@@ -550,21 +551,24 @@ router.post('/send-vaccination-reminder', async (req, res) => {
       return res.status(404).json({ error: 'Baby not found' });
     }
 
-    // Check if nextDate is a valid date
+    // Parse and validate the date
     const dateObject = new Date(nextDate);
+    console.log('Parsed dateObject:', dateObject); // Check the parsed date object
+
     if (isNaN(dateObject)) {
       return res.status(400).json({ error: 'Invalid next date value' });
     }
 
-    // Extract the date part
+    // Format the date to "YYYY-MM-DD"
     const formattedDate = dateObject.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    console.log('Formatted date:', formattedDate); // Check the formatted date
 
     // Create the message content
     const messageContent = `Dear Parent/Guardian, This is a reminder that your baby (ID: ${babyId}) is due for their next vaccination on ${formattedDate}. Please ensure your child receives the vaccination on the scheduled date. Thank you.`;
 
     // Format the phone number
     phoneNumber = '+94' + phoneNumber.toString();
-    console.log(phoneNumber);
+    console.log('Sending to phoneNumber:', phoneNumber); // Check the formatted phone number
 
     // Send the message using Twilio
     client.messages
@@ -574,18 +578,19 @@ router.post('/send-vaccination-reminder', async (req, res) => {
         body: messageContent,
       })
       .then(message => {
-        console.log(message.sid);
+        console.log('Message SID:', message.sid); // Log successful message sending
         res.status(200).json({ message: 'Message sent successfully', sid: message.sid });
       })
       .catch(error => {
-        console.error(error);
+        console.error('Twilio error:', error); // Log Twilio error
         res.status(500).json({ error: 'Failed to send message' });
       });
   } catch (error) {
-    console.error(error);
+    console.error('Internal error:', error); // Log internal server error
     res.status(500).json({ error: 'An error occurred' });
   }
 });
+
 
 
 module.exports = router; // Export the router instance

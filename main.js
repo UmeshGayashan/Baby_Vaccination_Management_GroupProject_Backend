@@ -6,13 +6,17 @@ const { authMiddleware } = require("./extra/JWT")
 require("./database/connections")
 const twilio = require('twilio');
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const accountSid = 'AC4954c15ce342d7b5e858fb758bb57ad2' //process.env.TWILIO_ACCOUNT_SID;
+const authToken =  '92623f2c5d83de59636f9eb9a3c28fc5'//process.env.TWILIO_AUTH_TOKEN;
 
 const client = twilio(accountSid, authToken);
 
+if (!accountSid || !authToken) {
+    console.error('Twilio credentials are missing. Please check your .env file.');
+    process.exit(1);
+  }
 
-const router = require('./routes/adminRoute'); // Adjust the path as needed
+// const router = require('./routes/adminRoute');
 
 const app = express()
 const port = 4000;

@@ -521,8 +521,11 @@ require('dotenv').config();
 //send SMS to give remainders
 
 // Twilio configuration
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const accountSid = 'AC4954c15ce342d7b5e858fb758bb57ad2';
+const authToken = '92623f2c5d83de59636f9eb9a3c28fc5';
+
+console.log(accountSid);
+console.log(authToken);
 const client = twilio(accountSid, authToken);
 
 // Route to send a message with next vaccination date and baby ID
@@ -546,7 +549,7 @@ router.post('/send-vaccination-reminder', async (req, res) => {
     // Send the message using Twilio
     client.messages
       .create({
-        to: phoneNumber,
+        to: '+94'+ phoneNumber,
         from: '+12077076920', // My number
         body: messageContent,
       })

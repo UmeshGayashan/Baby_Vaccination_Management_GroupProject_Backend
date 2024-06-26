@@ -47,6 +47,13 @@ router.put("/update-health-acc/:nic", async (req, res) => {
     const nic = req.params.nic;
     //In request body use Schema Attributes
     const updateData = req.body;
+// Check if the password is being updated
+if (updateData.password) {
+  // Hash the new password before saving
+  const hashedPassword = await bcrypt.hash(updateData.password, saltRounds);
+  updateData.password = hashedPassword;
+}
+
     console.log(updateData);
     const account = await healthcareProfessionalSchema.findOneAndUpdate(
       { hcpNIC: nic },
@@ -125,6 +132,14 @@ router.put("/update-parent-acc/:nic", async (req, res) => {
     const nic = req.params.nic;
     //In request body use Schema Attributes
     const updateData = req.body;
+
+    // Check if the password is being updated
+    if (updateData.password) {
+      // Hash the new password before saving
+      const hashedPassword = await bcrypt.hash(updateData.password, saltRounds);
+      updateData.password = hashedPassword;
+    }
+    
     console.log(updateData);
     const account = await ParentSchema.findOneAndUpdate(
       { motherorGuardianNIC: nic },

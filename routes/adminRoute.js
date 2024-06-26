@@ -536,7 +536,7 @@ const client = require('twilio')(accountSid, authToken);
 
 // Route to send a message with next vaccination date and baby ID
 router.post('/send-vaccination-reminder', async (req, res) => {
-  const { phoneNumber, babyId, nextDate } = req.body;
+  let { phoneNumber, babyId, nextDate } = req.body;
 
   if (!phoneNumber || !babyId || !nextDate) {
     return res.status(400).json({ error: 'Phone number, baby ID, and next date are required' });
@@ -549,20 +549,28 @@ router.post('/send-vaccination-reminder', async (req, res) => {
     if (!baby) {
       return res.status(404).json({ error: 'Baby not found' });
     }
-    // Extract the date from the nextDate timestamp
+
+    // Check if nextDate is a valid date
     const dateObject = new Date(nextDate);
+    if (isNaN(dateObject)) {
+      return res.status(400).json({ error: 'Invalid next date value' });
+    }
+
+    // Extract the date part
     const formattedDate = dateObject.toISOString().split('T')[0]; // "YYYY-MM-DD"
-    
+
     // Create the message content
     const messageContent = `Dear Parent/Guardian, This is a reminder that your baby (ID: ${babyId}) is due for their next vaccination on ${formattedDate}. Please ensure your child receives the vaccination on the scheduled date. Thank you.`;
-    const phoneNumber1 = '+94' + phoneNumber.toString();
-    console.log(phoneNumber1);
+
+    // Format the phone number
+    phoneNumber = '+94' + phoneNumber.toString();
+    console.log(phoneNumber);
 
     // Send the message using Twilio
     client.messages
       .create({
-        to: phoneNumber1,
-        from: '+15134502793', // My number
+        to: phoneNumber,
+        from: '+15134502793', // Your Twilio number
         body: messageContent,
       })
       .then(message => {
@@ -578,5 +586,6 @@ router.post('/send-vaccination-reminder', async (req, res) => {
     res.status(500).json({ error: 'An error occurred' });
   }
 });
+
 
 module.exports = router; // Export the router instance

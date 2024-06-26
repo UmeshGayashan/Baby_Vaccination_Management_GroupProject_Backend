@@ -4,6 +4,7 @@ const ParentSchema = require("../schemas/guardianSchema");
 const babySchema = require("../schemas/babySchema");
 const vaccinationSchema = require("../schemas/vaccinationSchema");
 const bcrypt = require('bcrypt')
+const saltRounds = 10; // Define saltRounds
 
 //Mother or Guardian Account Creation
 router.post("/create-parent-acc", async (req, res) => {

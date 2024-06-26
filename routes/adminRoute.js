@@ -551,11 +551,12 @@ router.post('/send-vaccination-reminder', async (req, res) => {
     }
     // Create the message content
     const messageContent = `Dear Parent/Guardian, This is a reminder that your baby (ID: ${babyId}) is due for their next vaccination on ${nextDate}. Please ensure your child receives the vaccination on the scheduled date. Thank you.`;
-
+    const phoneNumber = '+94' + phoneNumber.toString();
+    console.log(phoneNumber);
     // Send the message using Twilio
     client.messages
       .create({
-        to: '+94' + phoneNumber.toString(),
+        to: phoneNumber,
         from: '+15134502793', // My number
         body: messageContent,
       })

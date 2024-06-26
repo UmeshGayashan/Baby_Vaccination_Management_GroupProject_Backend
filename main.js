@@ -7,7 +7,7 @@ require("./database/connections")
 const twilio = require('twilio');
 
 const accountSid = 'AC4954c15ce342d7b5e858fb758bb57ad2' //process.env.TWILIO_ACCOUNT_SID;
-const authToken =  '92623f2c5d83de59636f9eb9a3c28fc5'//process.env.TWILIO_AUTH_TOKEN;
+const authToken =  '399d4795db1a740bb411a87994ff07cc'//process.env.TWILIO_AUTH_TOKEN;
 
 const client = twilio(accountSid, authToken);
 

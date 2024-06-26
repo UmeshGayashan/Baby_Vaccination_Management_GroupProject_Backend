@@ -6,8 +6,8 @@ const { authMiddleware } = require("./extra/JWT")
 require("./database/connections")
 const twilio = require('twilio');
 
-const accountSid = 'AC269ae6bb0419cdb03d318c53d0471ba5' //process.env.TWILIO_ACCOUNT_SID;
-const authToken =  'b2e7b24e7b3557ef3057a17f036b44f0'//process.env.TWILIO_AUTH_TOKEN;
+const accountSid = 'AC269ae6bb0419cdb03d318c53d0471ba5';
+const authToken = '27a924518b3a91c3a343cdfab78bf2be';//process.env.TWILIO_AUTH_TOKEN;
 
 const client = twilio(accountSid, authToken);
 

@@ -45,6 +45,9 @@ const vaccinationSchema = new mongoose.Schema({
   },
   status:{
     type:String
+  },
+  dataEnterd:{
+    type:String
   }
 });
 module.exports = mongoose.model("Vaccination",vaccinationSchema);

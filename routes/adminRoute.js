@@ -272,7 +272,8 @@ router.post("/vacc-adding", async (req, res) => {
       location,
       "nextDateTime.date": nextDate,
       "nextDateTime.time": nextTime,
-      status:"Approved"
+      status:"Approved",
+      dataEnterd: "Admin"
     });
 
     // Save the new vaccine to the database using async/await
@@ -550,21 +551,16 @@ router.post('/send-vaccination-reminder', async (req, res) => {
     if (!baby) {
       return res.status(404).json({ error: 'Baby not found' });
     }
+    // Extract the first 10 characters
+    const datePortion = nextDate.substring(0, 10);
 
-    // Parse and validate the date
-    const dateObject = new Date(nextDate);
-    console.log('Parsed dateObject:', dateObject); // Check the parsed date object
-
-    if (isNaN(dateObject)) {
-      return res.status(400).json({ error: 'Invalid next date value' });
-    }
 
     // Format the date to "YYYY-MM-DD"
-    const formattedDate = dateObject.toISOString().split('T')[0]; // "YYYY-MM-DD"
-    console.log('Formatted date:', formattedDate); // Check the formatted date
+    // const formattedDate = dateObject.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    console.log('Formatted date:', datePortion); // Check the formatted date
 
     // Create the message content
-    const messageContent = `Dear Parent/Guardian, This is a reminder that your baby (ID: ${babyId}) is due for their next vaccination on ${formattedDate}. Please ensure your child receives the vaccination on the scheduled date. Thank you.`;
+    const messageContent = `Dear Parent/Guardian, This is a reminder that your baby (ID: ${babyId}) is due for their next vaccination on ${datePortion}. Please ensure your child receives the vaccination on the scheduled date. Thank you.`;
 
     // Format the phone number
     phoneNumber = '+94' + phoneNumber.toString();

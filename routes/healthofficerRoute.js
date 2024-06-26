@@ -150,7 +150,8 @@ router.post("/vacc-adding", async (req, res) => {
       location,
       "nextDateTime.date": nextDate,
       "nextDateTime.time": nextTime,
-      status: "Pending"
+      status: "Pending",
+      dataEnterd: "Healthcare"
     });
 
     // Save the new vaccine to the database using async/await

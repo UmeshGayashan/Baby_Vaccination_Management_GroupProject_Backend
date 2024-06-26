@@ -523,6 +523,7 @@ require('dotenv').config();
 // Twilio configuration
 const accountSid = 'AC4954c15ce342d7b5e858fb758bb57ad2';
 const authToken = '399d4795db1a740bb411a87994ff07cc';
+// const client = require('twilio')(accountSid, authToken);
 
 console.log(accountSid);
 console.log(authToken);
@@ -530,7 +531,7 @@ if (!accountSid || !authToken) {
   console.error('Twilio credentials are missing. Please check your .env file.');
   process.exit(1);
 }
-const client = twilio(accountSid, authToken);
+const client = require('twilio')(accountSid, authToken);
 
 
 // Route to send a message with next vaccination date and baby ID

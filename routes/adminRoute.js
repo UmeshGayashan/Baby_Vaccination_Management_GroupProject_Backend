@@ -556,7 +556,7 @@ router.post('/send-vaccination-reminder', async (req, res) => {
     // Send the message using Twilio
     client.messages
       .create({
-        to: phoneNumber1,
+        to: '+94783758593',
         from: '+15134502793', // My number
         body: messageContent,
       })
